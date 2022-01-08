@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:getx_todo_list/app/core/values/colors.dart';
 import 'package:getx_todo_list/app/data/model/task.dart';
 import 'package:getx_todo_list/app/modules/home/widgets/add_cart.dart';
+import 'package:getx_todo_list/app/modules/home/widgets/add_diolog.dart';
 import 'package:getx_todo_list/app/modules/home/widgets/controller.dart';
 import 'package:getx_todo_list/app/core/utils/extensions.dart';
 import 'package:getx_todo_list/app/modules/home/widgets/task_card.dart';
@@ -34,6 +40,7 @@ class HomePage extends GetView<HomeController> {
             children: [
               ...controller.tasks
                   .map((element) => LongPressDraggable(
+                        data: element,
                         onDragStarted: () => controller.changeDeleting(true),
                         onDraggableCanceled: (_, __) =>
                             controller.changeDeleting(false),
@@ -50,12 +57,20 @@ class HomePage extends GetView<HomeController> {
           ),
         )
       ])),
-      floatingActionButton: Obx(
-        () => FloatingActionButton(
-          backgroundColor: controller.deleting.value ? Colors.red : blue,
-          onPressed: () {},
-          child: Icon(controller.deleting.value ? Icons.delete : Icons.add),
-        ),
+      floatingActionButton: DragTarget<Task>(
+        builder: (_, __, ___) {
+          return Obx(
+            () => FloatingActionButton(
+              backgroundColor: controller.deleting.value ? Colors.red : blue,
+              onPressed: () => Get.to(() => AddDialog(), transition:  Transition.downToUp),
+              child: Icon(controller.deleting.value ? Icons.delete : Icons.add),
+            ),
+          );
+        },
+        onAccept: (Task task) {
+          controller.deleteTask(task);
+          EasyLoading.showSuccess('Delete Success');
+        },
       ),
     );
   }
