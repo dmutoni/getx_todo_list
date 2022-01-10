@@ -17,58 +17,57 @@ class DetailPage extends StatelessWidget {
     var task = homeCtrl.task.value!;
     var color = HexColor.fromHex(task.color);
     return Scaffold(
-        body: ListView(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(3.0.wp),
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back))
-            ],
+        body: Form(
+      key: homeCtrl.formKey,
+      child: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(3.0.wp),
+            child: Row(
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.arrow_back))
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 8.0.wp
-          ),
-          child: Row(
-            children: [
-              Icon(IconData(
-                task.icon,
-                fontFamily: 'MaterialIcons',
-              ),
-              color: color,),
-              SizedBox(width: 3.0.wp,),
-              Text(task.title,
-                style: TextStyle(
-                  fontSize: 12.0.sp,
-                  fontWeight: FontWeight.bold
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0.wp),
+            child: Row(
+              children: [
+                Icon(
+                  IconData(
+                    task.icon,
+                    fontFamily: 'MaterialIcons',
+                  ),
+                  color: color,
                 ),
-              )
-            ],
+                SizedBox(
+                  width: 3.0.wp,
+                ),
+                Text(
+                  task.title,
+                  style:
+                      TextStyle(fontSize: 12.0.sp, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
           ),
-        ),
-        Obx(
-          () {
-            var totalTodos = homeCtrl.doingTodos.length + homeCtrl.doneTodos.length;
+          Obx(() {
+            var totalTodos =
+                homeCtrl.doingTodos.length + homeCtrl.doneTodos.length;
             return Padding(
-              padding: EdgeInsets.only(
-                left: 16.0.wp,
-                top: 3.0.wp,
-                right: 16.0.wp
-              ),
+              padding:
+                  EdgeInsets.only(left: 16.0.wp, top: 3.0.wp, right: 16.0.wp),
               child: Row(
                 children: [
                   Text('$totalTodos Tasks',
-                  style: TextStyle(
-                    fontSize: 12.0.sp,
-                    color: Colors.grey
-                  )),
-                  SizedBox(width: 3.0.wp,),
+                      style: TextStyle(fontSize: 12.0.sp, color: Colors.grey)),
+                  SizedBox(
+                    width: 3.0.wp,
+                  ),
                   Expanded(
                     child: StepProgressIndicator(
                       totalSteps: totalTodos == 0 ? 1 : totalTodos,
@@ -76,23 +75,45 @@ class DetailPage extends StatelessWidget {
                       size: 5,
                       padding: 0,
                       selectedGradientColor: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [color.withOpacity(0.5), color]
-                      ),
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [color.withOpacity(0.5), color]),
                       unselectedGradientColor: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Colors.grey[300]!, Colors.grey[300]!]
-                      ),
+                          colors: [Colors.grey[300]!, Colors.grey[300]!]),
                     ),
                   )
                 ],
               ),
             );
-          }
-        )
-      ],
+          }),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 5.0.wp, vertical: 2.0.wp),
+            child: TextFormField(
+                controller: homeCtrl.editCtrl,
+                autofocus: true,
+                decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey[400]!)),
+                  prefixIcon: Icon(
+                    Icons.check_box_outline_blank,
+                    color: Colors.grey[400],
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.done),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your todo item';
+                  }
+                  return null;
+                }),
+          )
+        ],
+      ),
     ));
   }
 }
