@@ -6,6 +6,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:getx_todo_list/app/core/utils/extensions.dart';
 import 'package:getx_todo_list/app/modules/detail/widgets/doing_list.dart';
+import 'package:getx_todo_list/app/modules/detail/widgets/done_list.dart';
 import 'package:getx_todo_list/app/modules/home/widgets/controller.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -128,6 +129,7 @@ class DetailPage extends StatelessWidget {
                 }),
           ),
           DoingList(),
+          DoneList()
         ],
       ),
     ));
