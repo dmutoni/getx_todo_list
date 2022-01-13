@@ -61,7 +61,7 @@ class HomePage extends GetView<HomeController> {
               ),
             )
           ])),
-          const ReportPage()
+          ReportPage()
         ]),
       ),
       floatingActionButton: DragTarget<Task>(
