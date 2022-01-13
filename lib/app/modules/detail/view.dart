@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:getx_todo_list/app/core/utils/extensions.dart';
+import 'package:getx_todo_list/app/modules/detail/widgets/doing_list.dart';
 import 'package:getx_todo_list/app/modules/home/widgets/controller.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 
@@ -28,6 +30,9 @@ class DetailPage extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       Get.back();
+                      homeCtrl.updateTodos();
+                      homeCtrl.changeTask(null);
+                      homeCtrl.editCtrl.clear();
                     },
                     icon: const Icon(Icons.arrow_back))
               ],
@@ -101,7 +106,17 @@ class DetailPage extends StatelessWidget {
                     color: Colors.grey[400],
                   ),
                   suffixIcon: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (homeCtrl.formKey.currentState!.validate()) {
+                        var success = homeCtrl.addTodo(homeCtrl.editCtrl.text);
+                        if (success) {
+                          EasyLoading.showSuccess('Todo item add success');
+                        } else {
+                          EasyLoading.showError('Todo item already exist');
+                        }
+                        homeCtrl.editCtrl.clear();
+                      }
+                    },
                     icon: const Icon(Icons.done),
                   ),
                 ),
@@ -111,7 +126,8 @@ class DetailPage extends StatelessWidget {
                   }
                   return null;
                 }),
-          )
+          ),
+          DoingList(),
         ],
       ),
     ));
